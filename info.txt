@@ -1,0 +1,20 @@
+﻿npm install -g parcel-bundler
+
+npm install faker
+
+
+www.npmjs.com
+search for:  @types/faker
+
+npm install @types/faker
+
+
+www.npmjs.com
+search for:  @types/googlemaps
+
+npm install @types/googlemaps
+
+
+
+RUN:
+  parcel index.html
