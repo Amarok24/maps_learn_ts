@@ -100502,6 +100502,26 @@ function () {
     });
   }
 
+  CustomMap.prototype.addUserMarker = function (user) {
+    new google.maps.Marker({
+      map: this.googleMap,
+      position: {
+        lat: user.location.lat,
+        lng: user.location.lng
+      }
+    });
+  };
+
+  CustomMap.prototype.addCompanyMarker = function (company) {
+    new google.maps.Marker({
+      map: this.googleMap,
+      position: {
+        lat: company.location.lat,
+        lng: company.location.lng
+      }
+    });
+  };
+
   return CustomMap;
 }();
 
@@ -100526,6 +100546,8 @@ console.log(user);
 var company = new Company_1.Company();
 console.log(company);
 var customMap = new CustomMap_1.CustomMap("map");
+customMap.addUserMarker(user);
+customMap.addCompanyMarker(company);
 },{"./User":"src/User.ts","./Company":"src/Company.ts","./CustomMap":"src/CustomMap.ts"}],"../../../../Users/janprazak/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -100554,7 +100576,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49913" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51475" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
