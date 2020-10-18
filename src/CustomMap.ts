@@ -1,6 +1,16 @@
-﻿import { User } from "./User";
-import { Company } from "./Company";
+﻿// import { User } from "./User";
+// import { Company } from "./Company";
 
+// Instructions to every other class on how they
+// can be an argument to addMarker()
+export interface Mappable {
+  location: {
+    lat: number
+    lng: number
+  };
+  markerContent(): string;
+  color: string;
+}
 
 export class CustomMap {
   private googleMap: google.maps.Map;
@@ -15,16 +25,25 @@ export class CustomMap {
     });
   }
 
-  addUserMarker(user: User) {
-    new google.maps.Marker({
+  addMarker(mappable: Mappable) {
+    const marker = new google.maps.Marker({
       map: this.googleMap,
       position: {
-        lat: user.location.lat,
-        lng: user.location.lng
+        lat: mappable.location.lat,
+        lng: mappable.location.lng
       }
     });
-  }
 
+    const infoWindow = new google.maps.InfoWindow({
+      content: mappable.markerContent()
+    });
+
+    marker.addListener("click", () => {
+      console.log("marker click handler");
+      infoWindow.open(this.googleMap, marker);
+    });
+  }
+/*
   addCompanyMarker(company: Company) {
     new google.maps.Marker({
       map: this.googleMap,
@@ -34,5 +53,5 @@ export class CustomMap {
       }
     });
   }
-
+ */
 }

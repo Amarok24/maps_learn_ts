@@ -7,8 +7,12 @@
 // which means NO DEFAULT EXPORTS, for example:  export default "test";
 // the reason for it is to not worry when to use import without curly braces {}
 
+import { Mappable } from "./CustomMap"; // import needed because of 'implements'
 
-export class User {
+
+// Keyword "implements" used for additional type check.
+// In this case class 'User' has to implement (satisfy) interface 'Mappable'.
+export class User implements Mappable {
   name: string;
   location: {
     // objects of properties don't get initialized on their own
@@ -16,7 +20,8 @@ export class User {
     // for type checking and overview
     lat: number; // latitude
     lng: number; // longitude
-  }
+  };
+  color: string = "red";
 
   constructor() {
     this.name = faker.name.firstName();
@@ -27,6 +32,10 @@ export class User {
       lat: parseFloat( faker.address.latitude() ),
       lng: parseFloat( faker.address.longitude() )
     };
+  }
+
+  markerContent(): string {
+    return `<strong style="color:${this.color}">User name:</strong> ${this.name}`;
   }
 
 }

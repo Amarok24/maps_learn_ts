@@ -100425,17 +100425,15 @@ Object.defineProperty(exports, "__esModule", {
 exports.User = void 0;
 
 var faker_1 = __importDefault(require("faker")); // imports the 'default export' and names it faker
-// however 'default export' is only usual for NPM and ES6 modules, it's uncommon for TS *
-// import * as faker from "faker"; // should work too?
-// * sidenote: convention in TypeScript is to NEVER use the 'default' keyword
-// which means NO DEFAULT EXPORTS, for example:  export default "test";
-// the reason for it is to not worry when to use import without curly braces {}
+// Keyword "implements" used for additional type check.
+// In this case class 'User' has to implement (satisfy) interface 'Mappable'.
 
 
 var User =
 /** @class */
 function () {
   function User() {
+    this.color = "red";
     this.name = faker_1.default.name.firstName(); // this.location.lat = 123 WON'T WORK _after_ compilation because .lat is undefined, see above
     // Uncaught TypeError: Cannot set property 'lat' of undefined
 
@@ -100444,6 +100442,10 @@ function () {
       lng: parseFloat(faker_1.default.address.longitude())
     };
   }
+
+  User.prototype.markerContent = function () {
+    return "<strong style=\"color:" + this.color + "\">User name:</strong> " + this.name;
+  };
 
   return User;
 }();
@@ -100469,6 +100471,7 @@ var Company =
 /** @class */
 function () {
   function Company() {
+    this.color = "green";
     this.companyName = faker_1.default.company.companyName();
     this.catchPhrase = faker_1.default.company.catchPhrase();
     this.location = {
@@ -100477,12 +100480,17 @@ function () {
     };
   }
 
+  Company.prototype.markerContent = function () {
+    return "\n      <h3>Company name: " + this.companyName + "</h3>\n      <strong style=\"color:" + this.color + "\">Catchphrase:</strong> " + this.catchPhrase + "\n    ";
+  };
+
   return Company;
 }();
 
 exports.Company = Company;
 },{"faker":"node_modules/faker/index.js"}],"src/CustomMap.ts":[function(require,module,exports) {
-"use strict";
+"use strict"; // import { User } from "./User";
+// import { Company } from "./Company";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -100502,23 +100510,22 @@ function () {
     });
   }
 
-  CustomMap.prototype.addUserMarker = function (user) {
-    new google.maps.Marker({
+  CustomMap.prototype.addMarker = function (mappable) {
+    var _this = this;
+
+    var marker = new google.maps.Marker({
       map: this.googleMap,
       position: {
-        lat: user.location.lat,
-        lng: user.location.lng
+        lat: mappable.location.lat,
+        lng: mappable.location.lng
       }
     });
-  };
-
-  CustomMap.prototype.addCompanyMarker = function (company) {
-    new google.maps.Marker({
-      map: this.googleMap,
-      position: {
-        lat: company.location.lat,
-        lng: company.location.lng
-      }
+    var infoWindow = new google.maps.InfoWindow({
+      content: mappable.markerContent()
+    });
+    marker.addListener("click", function () {
+      console.log("marker click handler");
+      infoWindow.open(_this.googleMap, marker);
     });
   };
 
@@ -100546,8 +100553,8 @@ console.log(user);
 var company = new Company_1.Company();
 console.log(company);
 var customMap = new CustomMap_1.CustomMap("map");
-customMap.addUserMarker(user);
-customMap.addCompanyMarker(company);
+customMap.addMarker(user);
+customMap.addMarker(company);
 },{"./User":"src/User.ts","./Company":"src/Company.ts","./CustomMap":"src/CustomMap.ts"}],"../../../../Users/janprazak/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -100576,7 +100583,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51475" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56601" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
